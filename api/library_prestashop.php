@@ -278,7 +278,7 @@ function CreatePrestaShopRequestAfterPaid(Cart $cart, OrderCore $order, Currency
     $request->setExtraInfo($extraInfo);
 
     $extraInfo["Name"] = 'CONNECTIVTY_MODULE';
-    $extraInfo["Value"] = 'Intrum Prestashop module 1.5';
+    $extraInfo["Value"] = 'Intrum Prestashop 1.7 module version 1.0';
     $request->setExtraInfo($extraInfo);	
 
     return $request;
