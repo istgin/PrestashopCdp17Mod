@@ -13,7 +13,7 @@ class Intrumcom extends Module
     {
         $this->name = 'intrumcom';
         $this->tab = 'payments';
-        $this->version = '1.6.0';
+        $this->version = '1.0.0';
         $this->author = 'Intrum (http://www.intrum.com/ch/de/)';
         $this->need_instance = 0;
         parent::__construct();
