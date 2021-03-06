@@ -281,7 +281,8 @@ class Intrumcom extends Module
 
     public function hookOrderConfirmation($params)
     {
-        $request = CreatePrestaShopRequestAfterPaid($params["cart"], $params["objOrder"], $params["currencyObj"]);
+        $currency = Currency::getCurrencyInstance($params["order"]->id_currency);
+        $request = CreatePrestaShopRequestAfterPaid($params["cart"], $params["order"], $currency);
         $xml = $request->createRequest();
 
         $intrumCommunicator = new IntrumCommunicator();
