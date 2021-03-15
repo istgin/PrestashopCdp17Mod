@@ -136,32 +136,33 @@ class Hook extends HookCore
 
 
         $isCheckout = false;
-        /* @var $context Context */
-        $controller = $context->controller;
-        if ($controller != null && $controller instanceof  OrderController) {
-            /* @var $controller OrderControllerCore */
-            $checkoutProcess = $controller->getCheckoutProcess();
-            if ($checkoutProcess != null && $checkoutProcess instanceof  CheckoutProcess) {
-                /* @var $checkoutProcess CheckoutProcessCore */
-                $currentStep = $checkoutProcess->getCurrentStep();
-                if ($currentStep != null && $currentStep instanceof CheckoutPaymentStep) {
-                    /* @var $currentStep CheckoutPaymentStep */
-                    $identifier = $currentStep->getIdentifier();
-                    if ($identifier == "checkout-payment-step") {
-                        $isCheckout = true;
+        if (in_array(
+            $hookName,
+            [
+                'displayPayment',
+                'displayPaymentEU'
+            ]
+        )
+        ) {
+            /* @var $context Context */
+            $controller = $context->controller;
+            if ($controller != null && $controller instanceof  OrderController) {
+                /* @var $controller OrderControllerCore */
+                $checkoutProcess = $controller->getCheckoutProcess();
+                if ($checkoutProcess != null && $checkoutProcess instanceof  CheckoutProcess) {
+                    /* @var $checkoutProcess CheckoutProcessCore */
+                    $currentStep = $checkoutProcess->getCurrentStep();
+                    if ($currentStep != null && $currentStep instanceof CheckoutPaymentStep) {
+                        /* @var $currentStep CheckoutPaymentStep */
+                        $identifier = $currentStep->getIdentifier();
+                        if ($identifier == "checkout-payment-step") {
+                            $isCheckout = true;
+                        }
                     }
                 }
             }
         }
-        if ($isCheckout && in_array(
-                $hookName,
-                [
-                    'displayPayment',
-                    'displayPaymentEU',
-                    'paymentOptions',
-                ]
-            )
-        ) {
+        if ($isCheckout) {
             $disabledMethods = unserialize(Configuration::get("INTRUM_DISABLED_METHODS"));
             $status = 0;
             if (self::$lastStatus == -1) {
