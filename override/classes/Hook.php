@@ -136,13 +136,17 @@ class Hook extends HookCore
 
 
         $isCheckout = false;
-        if (in_array(
-            $hookName,
-            [
-                'displayPayment',
-                'displayPaymentEU'
-            ]
-        )
+        $isEnabled = false;
+        if (Module::isEnabled('intrumcom')) {
+            $isEnabled = true;
+        }
+        if ($isEnabled && in_array(
+                $hookName,
+                [
+                    'displayPayment',
+                    'displayPaymentEU'
+                ]
+            )
         ) {
             /* @var $context Context */
             $controller = $context->controller;
