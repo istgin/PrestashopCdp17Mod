@@ -133,17 +133,36 @@ class Hook extends HookCore
         $sql->orderBy('hm.`position`');
 
         $allHookRegistrations = [];
-        if (in_array(
-            $hookName,
-            [
-                'displayPayment',
-                'displayPaymentEU',
-                'paymentOptions',
-            ]
-        )
+
+
+        $isCheckout = false;
+        /* @var $context Context */
+        $controller = $context->controller;
+        if ($controller != null && $controller instanceof  OrderController) {
+            /* @var $controller OrderControllerCore */
+            $checkoutProcess = $controller->getCheckoutProcess();
+            if ($checkoutProcess != null && $checkoutProcess instanceof  CheckoutProcess) {
+                /* @var $checkoutProcess CheckoutProcessCore */
+                $currentStep = $checkoutProcess->getCurrentStep();
+                if ($currentStep != null && $currentStep instanceof CheckoutPaymentStep) {
+                    /* @var $currentStep CheckoutPaymentStep */
+                    $identifier = $currentStep->getIdentifier();
+                    if ($identifier == "checkout-payment-step") {
+                        $isCheckout = true;
+                    }
+                }
+            }
+        }
+        if ($isCheckout && in_array(
+                $hookName,
+                [
+                    'displayPayment',
+                    'displayPaymentEU',
+                    'paymentOptions',
+                ]
+            )
         ) {
             $disabledMethods = unserialize(Configuration::get("INTRUM_DISABLED_METHODS"));
-            /* @var $context Context */
             $status = 0;
             if (self::$lastStatus == -1) {
                 if (!defined('_PS_MODULE_INTRUMCOM_API')) {
