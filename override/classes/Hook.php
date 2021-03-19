@@ -144,7 +144,8 @@ class Hook extends HookCore
                 $hookName,
                 [
                     'displayPayment',
-                    'displayPaymentEU'
+                    'displayPaymentEU',
+                    'paymentOptions'
                 ]
             )
         ) {
